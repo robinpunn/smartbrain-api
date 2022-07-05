@@ -3,6 +3,10 @@ const handleRegister = (req,res, knex, bcrypt) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
 
+    if (!email || !name || !password) {
+        return res.status(400).json('incorrect form submission')
+    }
+
     knex.transaction(trx => {
         trx.insert({
             hash: hash,
