@@ -1,6 +1,6 @@
-const handleProfile = (req,res, knex) => {
+const handleProfile = (req,res, db) => {
     const {id} = req.params
-    knex.select('*').from('users').where({id})
+    db.select('*').from('users').where({id})
         .then(user => {
             if (user.length) {
                 res.json(user[0])
