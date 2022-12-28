@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const bcrypt = require('bcryptjs')
 const cors = require('cors')
@@ -11,15 +12,21 @@ const image = require('./controllers/image');
 const db = knex({
   client: 'pg',
   connection: {
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false
-    }
+    connectionString: 'http://192.168.0.4',
+    user: 'pi',
+    port: '5432',
+    password: '',
+    database: 'pi'
   }
 });
 
-const app = express()
+// console.log(db.select('*').from('users'))
 
+db.select('*').from('users').then(data => {
+  console.log(data)
+})
+
+const app = express()
 
 app.use(express.json())
 app.use(cors())
@@ -31,7 +38,7 @@ app.get('/profile/:id', (req, res) => {profile.handleProfile(req, res, db)})
 app.put('/image', (req,res) => {image.handleImage(req, res, db)})
 app.post('/imageurl', (req,res) => {image.handleApiCall(req, res)})
 
-app.listen(process.env.PORT || 3000, ()=> {
-    console.log(`app is running on port ${process.env.PORT}`)
+app.listen(3000, ()=> {
+    console.log(`app is running on port 3000`)
 })
 
